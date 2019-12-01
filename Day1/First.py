@@ -3,7 +3,7 @@ allModules = list()
 # tests = [ 12, 14, 1969, 100756]
 # results = [2, 2, 654, 33583]
 
-with open("Day1/DataFirst.txt", 'r') as file:
+with open("Day1/fuel.txt", 'r') as file:
     for line in file:
         allModules.append(int(line[:-1]))
     

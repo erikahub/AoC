@@ -5,6 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "(Windows) C++ launch",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "C:\\Users\\Hito\\Documents\\Workspaces\\AoC\\Day1\\first.cpp",
+            "args": [],
+            "stopAtEntry": false,
+            "environment": [],
+            "externalConsole": false
+        },
+        {
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
