@@ -8,7 +8,7 @@
             "name": "(Windows) C++ launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "C:\\Users\\Hito\\Documents\\Workspaces\\AoC\\Day1\\first.cpp",
+            "program": "${file}",
             "args": [],
             "cwd": "${workspaceRoot}",
             "stopAtEntry": false,
