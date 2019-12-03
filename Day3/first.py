@@ -45,69 +45,44 @@ What is the Manhattan distance from the central port to the closest intersection
 origin = (0,0)
 firstWire = list()
 secondWire = list()
-# with open('Day3/wirepaths.txt') as file:
-with open('Day3/testpaths1.txt') as file:
+# with open('Day3/testpaths1.txt') as file:
+# with open('Day3/testpaths2.txt') as file:
+with open('Day3/wirepaths.txt') as file:
     line = file.readlines()
     firstWire += (s.replace('\n', '') for s in line[0].split(','))
     secondWire += line[1].split(',')
 
-
-import copy
-
+"""idea! save operations in tuples and look for distances between previous and current"""
 def getNodes(wire: list) -> list:
     #initialising paths with central port assuming x=0, y=0
-    wirePath = [origin] 
+    wirePath = [origin]
     for elem in wire:
         direction = elem[0]
         step = int(elem[1:])
         if direction == 'R':
-            wirePath.append(copy.deepcopy(wirePath[-1]))
-            wirePath[-1] = (wirePath[-1][0] + step, wirePath[-1][1])
+            # wirePath.append(copy.deepcopy(wirePath[-1]))
+            # wirePath[-1] = (wirePath[-1][0] + step, wirePath[-1][1])
+            wirePath += [*((wirePath[-1][0] + i, wirePath[-1][1])for i in range(1, step+1))]
         elif direction == 'L':
-            wirePath.append(copy.deepcopy(wirePath[-1]))
-            wirePath[-1] = (wirePath[-1][0] - step, wirePath[-1][1])
+            # wirePath.append(copy.deepcopy(wirePath[-1]))
+            # wirePath[-1] = (wirePath[-1][0] - step, wirePath[-1][1])
+            wirePath += [*((wirePath[-1][0] - i, wirePath[-1][1])for i in range(1, step+1))]
         elif direction == 'U':
-            wirePath.append(copy.deepcopy(wirePath[-1]))
-            wirePath[-1] = (wirePath[-1][0], wirePath[-1][1] + step)
+            # wirePath.append(copy.deepcopy(wirePath[-1]))
+            # wirePath[-1] = (wirePath[-1][0], wirePath[-1][1] + step)
+            wirePath += [*((wirePath[-1][0], wirePath[-1][1] + i)for i in range(1, step+1))]
         elif direction == 'D':
-            wirePath.append(copy.deepcopy(wirePath[-1]))
-            wirePath[-1] = (wirePath[-1][0], wirePath[-1][1] - step)
+            # wirePath.append(copy.deepcopy(wirePath[-1]))
+            # wirePath[-1] = (wirePath[-1][0], wirePath[-1][1] - step)
+            wirePath += [*((wirePath[-1][0], wirePath[-1][1] - i)for i in range(1, step+1))]
     return wirePath
 
-def line_intersection(line1, line2):
-    xdiff = (line1[0][0] - line1[1][0], line2[0][0] - line2[1][0])
-    ydiff = (line1[0][1] - line1[1][1], line2[0][1] - line2[1][1])
 
-    def det(a, b):
-        return a[0] * b[1] - a[1] * b[0]
+intersections = list()
+#get all coordinates where the wires run minus the startpoint
+nodesFirst = getNodes(firstWire)[1:]
+nodesSecond = getNodes(secondWire)[1:]
 
-    div = det(xdiff, ydiff)
-    if div == 0:
-       raise Exception('lines do not intersect')
-
-    d = (det(*line1), det(*line2))
-    x = det(d, xdiff) / div
-    y = det(d, ydiff) / div
-    return x, y
-
-
-distances = list()
-nodesFirst = getNodes(firstWire)
-nodesSecond = getNodes(secondWire)
-# print(set(wirePath).union(pathSecondWire))
-previousPairFirst = nodesFirst[1]
-previousPairSecond = nodesSecond[1]
-for pairFirst in nodesFirst[2:]:
-    for pairSecond in nodesSecond[2:]:
-        try:
-            pair = line_intersection([previousPairFirst, pairFirst], [previousPairSecond, pairSecond])
-        except Exception as e:
-            pass
-        else:
-            print(pair)
-            distances.append(abs(pair[0] + pair[1]))
-        
-        previousPairFirst=pairFirst
-        previousPairSecond=pairSecond
-    
-print(min(*distances))
+intersections += [*(pairFirst for pairFirst in nodesFirst if pairFirst in nodesSecond)]
+#print smallest Manhattan Distance
+print(min(*(abs(value[0])+abs(value[1]) for value in intersections)))
