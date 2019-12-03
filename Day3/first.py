@@ -45,6 +45,8 @@ What is the Manhattan distance from the central port to the closest intersection
 origin = (0,0)
 firstWire = list()
 secondWire = list()
+
+#expected results for testcase 1 is 159, for testcase 2 it is 135
 # with open('Day3/testpaths1.txt') as file:
 # with open('Day3/testpaths2.txt') as file:
 with open('Day3/wirepaths.txt') as file:
@@ -60,20 +62,20 @@ def getNodes(wire: list) -> list:
         direction = elem[0]
         step = int(elem[1:])
         if direction == 'R':
-            # wirePath.append(copy.deepcopy(wirePath[-1]))
-            # wirePath[-1] = (wirePath[-1][0] + step, wirePath[-1][1])
+            # wirePath.append(wirePath[-1])
+            # wirePath[-1] = (direction, wirePath[-1][1] + step, wirePath[-1][2])
             wirePath += [*((wirePath[-1][0] + i, wirePath[-1][1])for i in range(1, step+1))]
         elif direction == 'L':
-            # wirePath.append(copy.deepcopy(wirePath[-1]))
-            # wirePath[-1] = (wirePath[-1][0] - step, wirePath[-1][1])
+            # wirePath.append(wirePath[-1])
+            # wirePath[-1] = (direction, wirePath[-1][1] - step, wirePath[-1][2])
             wirePath += [*((wirePath[-1][0] - i, wirePath[-1][1])for i in range(1, step+1))]
         elif direction == 'U':
-            # wirePath.append(copy.deepcopy(wirePath[-1]))
-            # wirePath[-1] = (wirePath[-1][0], wirePath[-1][1] + step)
+            # wirePath.append(wirePath[-1])
+            # wirePath[-1] = (direction, wirePath[-1][1], wirePath[-1][2] + step)
             wirePath += [*((wirePath[-1][0], wirePath[-1][1] + i)for i in range(1, step+1))]
         elif direction == 'D':
-            # wirePath.append(copy.deepcopy(wirePath[-1]))
-            # wirePath[-1] = (wirePath[-1][0], wirePath[-1][1] - step)
+            # wirePath.append(wirePath[-1])
+            # wirePath[-1] = (direction, wirePath[-1][1], wirePath[-1][2] - step)
             wirePath += [*((wirePath[-1][0], wirePath[-1][1] - i)for i in range(1, step+1))]
     return wirePath
 
@@ -81,8 +83,11 @@ def getNodes(wire: list) -> list:
 intersections = list()
 #get all coordinates where the wires run minus the startpoint
 nodesFirst = getNodes(firstWire)[1:]
+print("constructed first set of nodes")
 nodesSecond = getNodes(secondWire)[1:]
-
+print("constructed all nodes")
 intersections += [*(pairFirst for pairFirst in nodesFirst if pairFirst in nodesSecond)]
+print("intersections calculated")
+# print(intersections)
 #print smallest Manhattan Distance
 print(min(*(abs(value[0])+abs(value[1]) for value in intersections)))
