@@ -91,19 +91,23 @@ def line_intersection(line1, line2):
     return x, y
 
 
+distances = list()
+nodesFirst = getNodes(firstWire)
+nodesSecond = getNodes(secondWire)
 # print(set(wirePath).union(pathSecondWire))
-previousPairFirst = origin
-previousPairSecond = origin
-for pairFirst in getNodes(firstWire):
-    for pairSecond in getNodes(secondWire):
+previousPairFirst = nodesFirst[1]
+previousPairSecond = nodesSecond[1]
+for pairFirst in nodesFirst[2:]:
+    for pairSecond in nodesSecond[2:]:
         try:
             pair = line_intersection([previousPairFirst, pairFirst], [previousPairSecond, pairSecond])
         except Exception as e:
             pass
         else:
             print(pair)
-            print("Distance:", abs(pair[0] + pair[1]))
+            distances.append(abs(pair[0] + pair[1]))
         
         previousPairFirst=pairFirst
         previousPairSecond=pairSecond
     
+print(min(*distances))
