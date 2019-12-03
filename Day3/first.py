@@ -3,9 +3,9 @@ FROM: https://adventofcode.com/2019/day/3
 --- Day 3: Crossed Wires ---
 The gravity assist was successful, and you're well on your way to the Venus refuelling station. During the rush back on Earth, the fuel management system wasn't completely installed, so that's next on the priority list.
 
-Opening the front panel reveals a jumble of wires. Specifically, two wires are connected to a central port and extend outward on a pathFirstWire. You trace the path each wire takes as it leaves the central port, one wire per line of text (your puzzle input).
+Opening the front panel reveals a jumble of wires. Specifically, two wires are connected to a central port and extend outward on a wirePath. You trace the path each wire takes as it leaves the central port, one wire per line of text (your puzzle input).
 
-The wires twist and turn, but the two wires occasionally cross paths. To fix the circuit, you need to find the intersection point closest to the central port. Because the wires are on a pathFirstWire, use the Manhattan distance for this measurement. While the wires do technically cross right at the central port where they both start, this point does not count, nor does a wire count as crossing with itself.
+The wires twist and turn, but the two wires occasionally cross paths. To fix the circuit, you need to find the intersection point closest to the central port. Because the wires are on a wirePath, use the Manhattan distance for this measurement. While the wires do technically cross right at the central port where they both start, this point does not count, nor does a wire count as crossing with itself.
 
 For example, if the first wire's path is R8,U5,L5,D3, then starting from the central port (o), it goes right 8, up 5, left 5, and finally down 3:
 
@@ -50,51 +50,59 @@ with open('Day3/testpaths.txt') as file:
     firstWire += (s.replace('\n', '') for s in line[0].split(','))
     secondWire += line[1].split(',')
 
-# last = firstWire[-1:]
-
-# maxVal = max(*(int(elem[1:]) for elem in firstWire)*(int(elem[1:]) for elem in secondWire))
-#initialising paths with central port assuming x=0, y=0
-pathFirstWire = [[0, 0]] 
-pathSecondWire = [[0, 0]]
 
 import copy
 
-for elem in firstWire:
-    direction = elem[0]
-    step = int(elem[1:])
-    if direction == 'R':
-        pathFirstWire.append(copy.deepcopy(pathFirstWire[-1]))
-        pathFirstWire[-1][0] += step
-    elif direction == 'L':
-        pathFirstWire.append(copy.deepcopy(pathFirstWire[-1]))
-        pathFirstWire[-1][0] -= step
-    elif direction == 'U':
-        pathFirstWire.append(copy.deepcopy(pathFirstWire[-1]))
-        pathFirstWire[-1][1] += step
-    elif direction == 'D':
-        pathFirstWire.append(copy.deepcopy(pathFirstWire[-1]))
-        pathFirstWire[-1][1] -= step
+def getNodes(wire: list) -> list:
+    #initialising paths with central port assuming x=0, y=0
+    wirePath = [(0, 0)] 
+    for elem in wire:
+        direction = elem[0]
+        step = int(elem[1:])
+        if direction == 'R':
+            wirePath.append(copy.deepcopy(wirePath[-1]))
+            wirePath[-1] = (wirePath[-1][0] + step, wirePath[-1][1])
+        elif direction == 'L':
+            wirePath.append(copy.deepcopy(wirePath[-1]))
+            wirePath[-1] = (wirePath[-1][0] - step, wirePath[-1][1])
+        elif direction == 'U':
+            wirePath.append(copy.deepcopy(wirePath[-1]))
+            wirePath[-1] = (wirePath[-1][0], wirePath[-1][1] + step)
+        elif direction == 'D':
+            wirePath.append(copy.deepcopy(wirePath[-1]))
+            wirePath[-1] = (wirePath[-1][0], wirePath[-1][1] - step)
+    return wirePath
 
-for elem in secondWire:
-    direction = elem[0]
-    step = int(elem[1:])
-    if direction == 'R':
-        pathSecondWire.append(copy.deepcopy(pathSecondWire[-1]))
-        pathSecondWire[-1][0] += step
-    elif direction == 'L':
-        pathSecondWire.append(copy.deepcopy(pathSecondWire[-1]))
-        pathSecondWire[-1][0] -= step
-    elif direction == 'U':
-        pathSecondWire.append(copy.deepcopy(pathSecondWire[-1]))
-        pathSecondWire[-1][1] += step
-    elif direction == 'D':
-        pathSecondWire.append(copy.deepcopy(pathSecondWire[-1]))
-        pathSecondWire[-1][1] -= step
+def line_intersection(line1, line2):
+    xdiff = (line1[0][0] - line1[1][0], line2[0][0] - line2[1][0])
+    ydiff = (line1[0][1] - line1[1][1], line2[0][1] - line2[1][1])
+
+    def det(a, b):
+        return a[0] * b[1] - a[1] * b[0]
+
+    div = det(xdiff, ydiff)
+    if div == 0:
+       raise Exception('lines do not intersect')
+
+    d = (det(*line1), det(*line2))
+    x = det(d, xdiff) / div
+    y = det(d, ydiff) / div
+    return x, y
 
 
-print(pathFirstWire)
-print(pathSecondWire)
-# print(set(pathFirstWire).union(pathSecondWire))
-for pair in pathFirstWire:
-    if pair in pathSecondWire:
-        print(pair)
+# print(set(wirePath).union(pathSecondWire))
+previousPairFirst = (0,0)
+previousPairSecond = (0,0)
+for pairFirst in getNodes(firstWire):
+    for pairSecond in getNodes(secondWire):
+        try:
+            line_intersection([previousPairFirst, pairFirst], [previousPairSecond, pairSecond])
+            pass
+        except expression as identifier:
+            pass
+        else:
+            pass
+        print()
+        previousPairFirst=pairFirst
+        previousPairSecond=pairSecond
+    
