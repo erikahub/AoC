@@ -45,7 +45,7 @@ What is the Manhattan distance from the central port to the closest intersection
 firstWire = list()
 secondWire = list()
 # with open('Day3/wirepaths.txt') as file:
-with open('Day3/testpaths.txt') as file:
+with open('Day3/testpaths1.txt') as file:
     line = file.readlines()
     firstWire += (s.replace('\n', '') for s in line[0].split(','))
     secondWire += line[1].split(',')
