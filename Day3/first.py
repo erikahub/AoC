@@ -42,6 +42,7 @@ U98,R91,D20,R16,D67,R40,U7,R15,U6,R7 = distance 135
 What is the Manhattan distance from the central port to the closest intersection?
 """
 
+origin = (0,0)
 firstWire = list()
 secondWire = list()
 # with open('Day3/wirepaths.txt') as file:
@@ -55,7 +56,7 @@ import copy
 
 def getNodes(wire: list) -> list:
     #initialising paths with central port assuming x=0, y=0
-    wirePath = [(0, 0)] 
+    wirePath = [origin] 
     for elem in wire:
         direction = elem[0]
         step = int(elem[1:])
@@ -91,18 +92,18 @@ def line_intersection(line1, line2):
 
 
 # print(set(wirePath).union(pathSecondWire))
-previousPairFirst = (0,0)
-previousPairSecond = (0,0)
+previousPairFirst = origin
+previousPairSecond = origin
 for pairFirst in getNodes(firstWire):
     for pairSecond in getNodes(secondWire):
         try:
-            line_intersection([previousPairFirst, pairFirst], [previousPairSecond, pairSecond])
-            pass
-        except expression as identifier:
+            pair = line_intersection([previousPairFirst, pairFirst], [previousPairSecond, pairSecond])
+        except Exception as e:
             pass
         else:
-            pass
-        print()
+            print(pair)
+            print("Distance:", abs(pair[0] + pair[1]))
+        
         previousPairFirst=pairFirst
         previousPairSecond=pairSecond
     
