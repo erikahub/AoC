@@ -18,3 +18,26 @@ How many different passwords within the range given in your puzzle input meet th
 
 Your puzzle input is 197487-673251.
 """
+import re
+
+keylength = 6
+lower, upper = 197487, 673251
+possibilities = 0
+
+for n in range(lower, upper+1):
+    n = str(n)
+    ok = False
+    for c in range(keylength-1):
+        if ok == False and n[c] == n[c+1]:
+            ok = True    
+        if n[c] > n[c+1]:
+            ok = False
+            break
+    if ok == True:
+        possibilities+=1
+        # print(n)
+    
+print(possibilities)
+# print('10'[0] < '11'[0])
+# if re.search('[(11)|(22)|(33)|(44)|(55)|(66)|(77)|(88)|(99)]', '101010'):
+	# print('yes')
