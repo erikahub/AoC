@@ -17,8 +17,8 @@ keylength = 6
 lower, upper = 197487, 673251
 possibilities = 0
 
-# for n in range(lower, upper+1):
-for n in [112233, 123444, 111122]:
+for n in range(lower, upper+1):
+# for n in [112233, 123444, 111122]:
 # for n in [111111, 223450, 123789]:
     n = str(n)
     ok = False
@@ -32,11 +32,13 @@ for n in [112233, 123444, 111122]:
         if ok == False:
             if n[c] == n[c+1]:
                 sameVal+=1
+                if c == keylength-2 and sameVal == 1:
+                    ok = True
             elif sameVal == 1:
                 ok = True
             else:
                 sameVal = 0
-                
+        
         # if n[c] > n[c+1]:
         #     ok = False
         #     break
