@@ -12,3 +12,27 @@ How many different passwords within the range given in your puzzle input meet al
 
 Your puzzle input is still 197487-673251.
 """
+
+keylength = 6
+lower, upper = 197487, 673251
+possibilities = 0
+
+for n in range(lower, upper+1):
+    n = str(n)
+    ok = False
+    for c in range(keylength-1):
+        #if values decrease end with false
+        if n[c] > n[c+1]:
+            ok = False
+            break
+        if n[c] == n[c+1]:
+            if ok == False:
+                ok = True 
+                if c > 1 and n[c] != n[c-1]:
+                    ok = False
+            elif ok == True and n[c] == n[c-1]:
+                 ok = False
+    if ok == True:
+        possibilities+=1
+        
+print(possibilities)
