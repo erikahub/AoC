@@ -18,7 +18,6 @@ How many different passwords within the range given in your puzzle input meet th
 
 Your puzzle input is 197487-673251.
 """
-import re
 
 keylength = 6
 lower, upper = 197487, 673251
