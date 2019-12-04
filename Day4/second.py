@@ -22,7 +22,6 @@ for n in range(lower, upper+1):
 # for n in [111111, 223450, 123789]:
     n = str(n)
     ok = False
-    doubleFound  = False
     sameVal = 0
     for c in range(keylength-1):
         #if values decrease end with false
@@ -38,24 +37,7 @@ for n in range(lower, upper+1):
                 ok = True
             else:
                 sameVal = 0
-        
-        # if n[c] > n[c+1]:
-        #     ok = False
-        #     break
-        # if n[c] == n[c+1]:
-        #     sameVal += 1
-        #     if ok == False:
-        #         sameVal = True
-        #         ok = True 
-        #         if c > 1 and n[c] != n[c-1]:
-        #             ok = False
-        #     elif ok == True and n[c] == n[c-1]:
-        #          ok = False
-        # elif sameVal>1:
-        #     ok=False
-        # else:
-        #     sameVal = 0
-    # if ok == True and doubleFound == True:
+                
     if ok == True:
         possibilities+=1
         
