@@ -37,3 +37,102 @@ This time, when the TEST diagnostic program runs its input instruction to get th
 What is the diagnostic code for system ID 5?
 """
 
+POSITIONMODE = 0
+IMMEDIATEMODE = 1
+
+# input_ = int(input("Input:"))
+input_ = 1
+
+def calculate(sequence: list): 
+    i=0
+    
+    def _getIndex_(mode: int, index: int):
+        if mode == POSITIONMODE:
+            return sequence[index]
+        elif mode == IMMEDIATEMODE:
+            return index
+        return None
+
+    init = [int(i) for i in str(sequence[i])]
+    # modes = [A, B, C, D, E]
+    #A - mode of 3rd parameter, B - mode of 2nd parameter, C - mode of 1st parameter, DE - two-digit opcode
+    modes = [POSITIONMODE,POSITIONMODE,POSITIONMODE,POSITIONMODE,POSITIONMODE]
+    for s in range(0, len(init)):
+        modes[len(modes)-s-1] = init[-s-1]
+    OPCode = modes[-2]*10 + modes[-1]
+    while OPCode != 99:
+        p1, p2, p3 = i+1, i+2, i+3
+        if OPCode == 1:
+            sequence[sequence[p3]] = sequence[_getIndex_(modes[2],p1)]+sequence[_getIndex_(modes[1],p2)]
+            i+=4
+        elif OPCode == 2:
+            sequence[sequence[p3]] = sequence[_getIndex_(modes[2],p1)]*sequence[_getIndex_(modes[1],p2)]
+            i+=4
+        elif OPCode == 3:
+            sequence[sequence[p1]] = input_
+            i+=2
+        elif OPCode == 4:
+            print(sequence[_getIndex_(modes[2], p1)])
+            i+=2
+        elif OPCode == 5:
+            if sequence[_getIndex_(modes[2], p1)] != 0:
+                i = sequence[_getIndex_(modes[1], p2)]
+        elif OPCode == 6:
+            if sequence[_getIndex_(modes[2], p1)] == 0:
+                i = sequence[_getIndex_(modes[1], p2)]
+        elif OPCode == 7:
+            sequence[sequence[p3]] = 1 if sequence[_getIndex_(modes[2], p1)] < sequence[_getIndex_(modes[1], p2)] else 0 
+            i+=4
+        elif OPCode == 8:
+            sequence[sequence[p3]] = 1 if sequence[_getIndex_(modes[2], p1)] == sequence[_getIndex_(modes[1], p2)] else 0 
+            i+=4
+        else:
+            print('unknown operation')
+            i+=4
+        
+        init = [int(i) for i in str(sequence[i])]
+        modes = modes = [POSITIONMODE,POSITIONMODE,POSITIONMODE,POSITIONMODE,POSITIONMODE]
+        for s in range(0, len(init)):
+            modes[len(modes)-s-1] = init[-s-1]
+        OPCode = modes[-2]*10 + modes[-1]
+
+    return sequence
+
+
+######## test cases
+# expectedResult = [1002,4,3,4,99]
+# line = [1002,4,3,4,33]
+# print('Test 1:', calculate(line) == expectedResult)
+# expectedResult = [1101,100,-1,4,99]
+# line = [1101,100,-1,4,0]
+# print('Test 2:', calculate(line) == expectedResult)
+# line = [3,9,8,9,10,9,4,9,99,-1,8]
+# print('Test 3, expected 1 if input is 8, otherwise 0:', calculate(line))
+# line = [3,9,7,9,10,9,4,9,99,-1,8]
+# print('Test 4, expected 1 if input is less than 8, otherwise 0:', calculate(line))
+# line = [3,3,1108,-1,8,3,4,3,99]
+# print('Test 5, expected 1 if input is 8, otherwise 0:', calculate(line))
+# line = [3,3,1107,-1,8,3,4,3,99]
+# print('Test 6, expected 1 if input is less than 8, otherwise 0:', calculate(line))
+# line = [3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9]
+# print('Test 7, expected 1 if input is non-zero, otherwise 0:', calculate(line))
+# line = [3,3,1105,-1,9,1101,0,0,12,4,12,99,1]
+# print('Test 8, expected 1 if input is non-zero, otherwise 0:', calculate(line))
+line = [3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,
+    1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,
+    999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99]
+input_ = 7
+print('Test 9, expected 999 if input is below 8, 1000 if equal 8, otherwise 1001:', calculate(line))
+input_ = 8
+print('Test 9, expected 999 if input is below 8, 1000 if equal 8, otherwise 1001:', calculate(line))
+input_ = 9
+print('Test 9, expected 999 if input is below 8, 1000 if equal 8, otherwise 1001:', calculate(line))
+
+
+split = list()
+
+#read from file
+# with open('Day5/input.txt') as file:
+    # split = [ int(i) for i in file.readlines(1)[0].split(',') ]
+    
+# calculate(split)
