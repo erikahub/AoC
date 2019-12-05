@@ -51,7 +51,6 @@ After providing 1 to the only input instruction and passing all the tests, what 
 POSITIONMODE = 0
 IMMEDIATEMODE = 1
 
-# input_ = int(input("Your input:"))
 input_ = 1
 
 def calculate(sequence: list): 
@@ -108,13 +107,9 @@ print('Test 1:', calculate(line) == expectedResult)
 
 
 split = list()
-# split = [ int(i) for i in line.split(',') ]
 
 #read from file
 with open('Day5/input.txt') as file:
     split = [ int(i) for i in file.readlines(1)[0].split(',') ]
     
 calculate(split)
-# split[1] = 12
-# split[2] = 2
-# print("Result:", calculate(split)[0])
