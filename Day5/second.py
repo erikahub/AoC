@@ -41,7 +41,7 @@ POSITIONMODE = 0
 IMMEDIATEMODE = 1
 
 # input_ = int(input("Input:"))
-input_ = 1
+input_ = 8
 
 def calculate(sequence: list): 
     i=0
@@ -99,38 +99,90 @@ def calculate(sequence: list):
     return sequence
 
 
-######## test cases
-# expectedResult = [1002,4,3,4,99]
-# line = [1002,4,3,4,33]
-# print('Test 1:', calculate(line) == expectedResult)
-# expectedResult = [1101,100,-1,4,99]
-# line = [1101,100,-1,4,0]
-# print('Test 2:', calculate(line) == expectedResult)
-# line = [3,9,8,9,10,9,4,9,99,-1,8]
-# print('Test 3, expected 1 if input is 8, otherwise 0:', calculate(line))
-# line = [3,9,7,9,10,9,4,9,99,-1,8]
-# print('Test 4, expected 1 if input is less than 8, otherwise 0:', calculate(line))
-# line = [3,3,1108,-1,8,3,4,3,99]
-# print('Test 5, expected 1 if input is 8, otherwise 0:', calculate(line))
-# line = [3,3,1107,-1,8,3,4,3,99]
-# print('Test 6, expected 1 if input is less than 8, otherwise 0:', calculate(line))
-# line = [3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9]
-# print('Test 7, expected 1 if input is non-zero, otherwise 0:', calculate(line))
-# line = [3,3,1105,-1,9,1101,0,0,12,4,12,99,1]
-# print('Test 8, expected 1 if input is non-zero, otherwise 0:', calculate(line))
-line = [3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,
-    1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,
-    999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99]
-input_ = 7
-print('Test 9, expected 999 if input is below 8, 1000 if equal 8, otherwise 1001:', calculate(line))
-input_ = 8
-print('Test 9, expected 999 if input is below 8, 1000 if equal 8, otherwise 1001:', calculate(line))
-input_ = 9
-print('Test 9, expected 999 if input is below 8, 1000 if equal 8, otherwise 1001:', calculate(line))
+def test():
+    global input_
+    line = [3,9,8,9,10,9,4,9,99,-1,8]
+    input_ = 8
+    print('Test 1: 1 =', end=' ')
+    calculate(line)
+    input_ = 2
+    print('Test 2: 0 =', end=' ')
+    calculate(line)
+    input_ = 123
+    print('Test 3: 0 =', end=' ')
+    calculate(line)
+    
+    line = [3,9,7,9,10,9,4,9,99,-1,8]  
+    input_ = 8
+    print('Test 4: 0 =', end=' ')
+    calculate(line)
+    input_ = 2
+    print('Test 5: 1 =', end=' ')
+    calculate(line)
+    input_ = 123
+    print('Test 6: 0 =', end=' ')
+    calculate(line)
 
+    line = [3,3,1108,-1,8,3,4,3,99]  
+    input_ = 8
+    print('Test 7: 1 =', end=' ')
+    calculate(line)
+    input_ = 2
+    print('Test 8: 0 =', end=' ')
+    calculate(line)
+    input_ = 123
+    print('Test 9: 0 =', end=' ')
+    calculate(line)
 
-split = list()
+    line = [3,3,1107,-1,8,3,4,3,99]  
+    input_ = 8
+    print('Test 10: 0 =', end=' ')
+    calculate(line)
+    input_ = 2
+    print('Test 11: 1 =', end=' ')
+    calculate(line)
+    input_ = 123
+    print('Test 12: 0 =', end=' ')
+    calculate(line)
+    
+    line = [3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9]  
+    input_ = 0
+    print('Test 13: 0 =', end=' ')
+    calculate(line)
+    input_ = -12
+    print('Test 14: 1 =', end=' ')
+    calculate(line)
+    input_ = 123
+    print('Test 15: 1 =', end=' ')
+    calculate(line)
+    
+    line = [3,3,1105,-1,9,1101,0,0,12,4,12,99,1]  
+    input_ = 0
+    print('Test 16: 0 =', end=' ')
+    calculate(line)
+    input_ = -12
+    print('Test 17: 1 =', end=' ')
+    calculate(line)
+    input_ = 123
+    print('Test 18: 1 =', end=' ')
+    calculate(line)
+    
+    line = [3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,
+        1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,
+        999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99]  
+    input_ = 8
+    print('Test 19: 1000 =', end=' ')
+    calculate(line)
+    input_ = 2
+    print('Test 20: 999 =', end=' ')
+    calculate(line)
+    input_ = 123
+    print('Test 21: 1001 =', end=' ')
+    calculate(line)
 
+test()
+
+# split = list()
 #read from file
 # with open('Day5/input.txt') as file:
     # split = [ int(i) for i in file.readlines(1)[0].split(',') ]
