@@ -41,7 +41,7 @@ POSITIONMODE = 0
 IMMEDIATEMODE = 1
 
 # input_ = int(input("Input:"))
-input_ = 8
+input_ = 5
 
 def calculate(sequence: list): 
     i=0
@@ -72,7 +72,7 @@ def calculate(sequence: list):
             i+=4
         elif OPCode == 3:
             sequence[sequence[p1]] = input_
-            i+=2
+            i+=2    #line = [3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9] 
         elif OPCode == 4:
             print(sequence[_getIndex_(modes[2], p1)])
             i+=2
@@ -104,73 +104,86 @@ def test():
     #Using position mode, consider whether the input is equal to 8; output 1 (if it is) or 0 (if it is not).
     line = [3,9,8,9,10,9,4,9,99,-1,8]
     input_ = 8
-    print('Test  1: 1 =', end=' ')
+    print('Test  1: 1 :', end=' ')
     calculate(line)
+    line = [3,9,8,9,10,9,4,9,99,-1,8]
     input_ = 2
-    print('Test  2: 0 =', end=' ')
+    print('Test  2: 0 :', end=' ')
     calculate(line)
+    line = [3,9,8,9,10,9,4,9,99,-1,8]
     input_ = 123
-    print('Test  3: 0 =', end=' ')
+    print('Test  3: 0 :', end=' ')
     calculate(line)
     
     #Using position mode, consider whether the input is less than 8; output 1 (if it is) or 0 (if it is not).
     line = [3,9,7,9,10,9,4,9,99,-1,8]  
     input_ = 8
-    print('Test  4: 0 =', end=' ')
+    print('Test  4: 0 :', end=' ')
     calculate(line)
+    line = [3,9,7,9,10,9,4,9,99,-1,8]  
     input_ = 2
-    print('Test  5: 1 =', end=' ')
+    print('Test  5: 1 :', end=' ')
     calculate(line)
+    line = [3,9,7,9,10,9,4,9,99,-1,8]  
     input_ = 123
-    print('Test  6: 0 =', end=' ')
+    print('Test  6: 0 :', end=' ')
     calculate(line)
 
     #Using immediate mode, consider whether the input is equal to 8; output 1 (if it is) or 0 (if it is not).
     line = [3,3,1108,-1,8,3,4,3,99]  
     input_ = 8
-    print('Test  7: 1 =', end=' ')
+    print('Test  7: 1 :', end=' ')
     calculate(line)
+    line = [3,3,1108,-1,8,3,4,3,99]  
     input_ = 2
-    print('Test  8: 0 =', end=' ')
+    print('Test  8: 0 :', end=' ')
     calculate(line)
+    line = [3,3,1108,-1,8,3,4,3,99]  
     input_ = 123
-    print('Test  9: 0 =', end=' ')
+    print('Test  9: 0 :', end=' ')
     calculate(line)
 
     #Using immediate mode, consider whether the input is less than 8; output 1 (if it is) or 0 (if it is not).
     line = [3,3,1107,-1,8,3,4,3,99]  
     input_ = 8
-    print('Test 10: 0 =', end=' ')
+    print('Test 10: 0 :', end=' ')
     calculate(line)
+    line = [3,3,1107,-1,8,3,4,3,99]  
     input_ = 2
-    print('Test 11: 1 =', end=' ')
+    print('Test 11: 1 :', end=' ')
     calculate(line)
+    line = [3,3,1107,-1,8,3,4,3,99]  
     input_ = 123
-    print('Test 12: 0 =', end=' ')
+    print('Test 12: 0 :', end=' ')
     calculate(line)
     
     #output 0 if the input was zero or 1 if the input was non-zero using position mode
+    # 15   [3,12,6,12,15,1,13,14,13,4,13,99,123,2,1,9]
     line = [3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9]  
     input_ = 0
-    print('Test 13: 0 =', end=' ')
+    print('Test 13: 0 :', end=' ')
     calculate(line)
+    line = [3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9]  
     input_ = -12
-    print('Test 14: 1 =', end=' ')
+    print('Test 14: 1 :', end=' ')
     calculate(line)
+    line = [3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9]  
     input_ = 123
-    print('Test 15: 1 =', end=' ')
+    print('Test 15: 1 :', end=' ')
     calculate(line)
     
     #output 0 if the input was zero or 1 if the input was non-zero using immediate mode
     line = [3,3,1105,-1,9,1101,0,0,12,4,12,99,1]  
     input_ = 0
-    print('Test 16: 0 =', end=' ')
+    print('Test 16: 0 :', end=' ')
     calculate(line)
+    line = [3,3,1105,-1,9,1101,0,0,12,4,12,99,1]  
     input_ = -12
-    print('Test 17: 1 =', end=' ')
+    print('Test 17: 1 :', end=' ')
     calculate(line)
+    line = [3,3,1105,-1,9,1101,0,0,12,4,12,99,1]  
     input_ = 123
-    print('Test 18: 1 =', end=' ')
+    print('Test 18: 1 :', end=' ')
     calculate(line)
     
     #uses an input instruction to ask for a single number, will then output 999 if the input value is below 8,
@@ -179,20 +192,26 @@ def test():
         1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,
         999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99]  
     input_ = 8
-    print('Test 19: 1000 =', end=' ')
+    print('Test 19: 1000 :', end=' ')
     calculate(line)
+    line = [3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,
+        1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,
+        999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99]  
     input_ = 2
-    print('Test 20: 999 =', end=' ')
+    print('Test 20: 999 :', end=' ')
     calculate(line)
+    line = [3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,
+        1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,
+        999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99]  
     input_ = 123
-    print('Test 21: 1001 =', end=' ')
+    print('Test 21: 1001 :', end=' ')
     calculate(line)
 
-test()
+# test()
 
-# split = list()
+split = list()
 #read from file
-# with open('Day5/input.txt') as file:
-    # split = [ int(i) for i in file.readlines(1)[0].split(',') ]
+with open('Day5/input.txt') as file:
+    split = [ int(i) for i in file.readlines(1)[0].split(',') ]
     
-# calculate(split)
+calculate(split)
