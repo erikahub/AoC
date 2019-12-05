@@ -46,6 +46,7 @@ input_ = 8
 def calculate(sequence: list): 
     i=0
     
+    ops = list()
     def _getIndex_(mode: int, index: int):
         if mode == POSITIONMODE:
             return sequence[index]
@@ -61,6 +62,7 @@ def calculate(sequence: list):
         modes[len(modes)-s-1] = init[-s-1]
     OPCode = modes[-2]*10 + modes[-1]
     while OPCode != 99:
+        ops.append(OPCode)
         p1, p2, p3 = i+1, i+2, i+3
         if OPCode == 1:
             sequence[sequence[p3]] = sequence[_getIndex_(modes[2],p1)]+sequence[_getIndex_(modes[1],p2)]
@@ -75,11 +77,9 @@ def calculate(sequence: list):
             print(sequence[_getIndex_(modes[2], p1)])
             i+=2
         elif OPCode == 5:
-            if sequence[_getIndex_(modes[2], p1)] != 0:
-                i = sequence[_getIndex_(modes[1], p2)]
+            i = sequence[_getIndex_(modes[1], p2)] if sequence[_getIndex_(modes[2], p1)] != 0 else i+3
         elif OPCode == 6:
-            if sequence[_getIndex_(modes[2], p1)] == 0:
-                i = sequence[_getIndex_(modes[1], p2)]
+            i = sequence[_getIndex_(modes[1], p2)] if sequence[_getIndex_(modes[2], p1)] == 0 else i+3
         elif OPCode == 7:
             sequence[sequence[p3]] = 1 if sequence[_getIndex_(modes[2], p1)] < sequence[_getIndex_(modes[1], p2)] else 0 
             i+=4
@@ -89,7 +89,7 @@ def calculate(sequence: list):
         else:
             print('unknown operation')
             i+=4
-        
+            
         init = [int(i) for i in str(sequence[i])]
         modes = modes = [POSITIONMODE,POSITIONMODE,POSITIONMODE,POSITIONMODE,POSITIONMODE]
         for s in range(0, len(init)):
@@ -101,39 +101,43 @@ def calculate(sequence: list):
 
 def test():
     global input_
+    #Using position mode, consider whether the input is equal to 8; output 1 (if it is) or 0 (if it is not).
     line = [3,9,8,9,10,9,4,9,99,-1,8]
     input_ = 8
-    print('Test 1: 1 =', end=' ')
+    print('Test  1: 1 =', end=' ')
     calculate(line)
     input_ = 2
-    print('Test 2: 0 =', end=' ')
+    print('Test  2: 0 =', end=' ')
     calculate(line)
     input_ = 123
-    print('Test 3: 0 =', end=' ')
+    print('Test  3: 0 =', end=' ')
     calculate(line)
     
+    #Using position mode, consider whether the input is less than 8; output 1 (if it is) or 0 (if it is not).
     line = [3,9,7,9,10,9,4,9,99,-1,8]  
     input_ = 8
-    print('Test 4: 0 =', end=' ')
+    print('Test  4: 0 =', end=' ')
     calculate(line)
     input_ = 2
-    print('Test 5: 1 =', end=' ')
+    print('Test  5: 1 =', end=' ')
     calculate(line)
     input_ = 123
-    print('Test 6: 0 =', end=' ')
+    print('Test  6: 0 =', end=' ')
     calculate(line)
 
+    #Using immediate mode, consider whether the input is equal to 8; output 1 (if it is) or 0 (if it is not).
     line = [3,3,1108,-1,8,3,4,3,99]  
     input_ = 8
-    print('Test 7: 1 =', end=' ')
+    print('Test  7: 1 =', end=' ')
     calculate(line)
     input_ = 2
-    print('Test 8: 0 =', end=' ')
+    print('Test  8: 0 =', end=' ')
     calculate(line)
     input_ = 123
-    print('Test 9: 0 =', end=' ')
+    print('Test  9: 0 =', end=' ')
     calculate(line)
 
+    #Using immediate mode, consider whether the input is less than 8; output 1 (if it is) or 0 (if it is not).
     line = [3,3,1107,-1,8,3,4,3,99]  
     input_ = 8
     print('Test 10: 0 =', end=' ')
@@ -145,6 +149,7 @@ def test():
     print('Test 12: 0 =', end=' ')
     calculate(line)
     
+    #output 0 if the input was zero or 1 if the input was non-zero using position mode
     line = [3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9]  
     input_ = 0
     print('Test 13: 0 =', end=' ')
@@ -156,6 +161,7 @@ def test():
     print('Test 15: 1 =', end=' ')
     calculate(line)
     
+    #output 0 if the input was zero or 1 if the input was non-zero using immediate mode
     line = [3,3,1105,-1,9,1101,0,0,12,4,12,99,1]  
     input_ = 0
     print('Test 16: 0 =', end=' ')
@@ -167,6 +173,8 @@ def test():
     print('Test 18: 1 =', end=' ')
     calculate(line)
     
+    #uses an input instruction to ask for a single number, will then output 999 if the input value is below 8,
+    # output 1000 if the input value is equal to 8, or output 1001 if the input value is greater than 8.
     line = [3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,
         1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,
         999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99]  
