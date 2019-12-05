@@ -54,55 +54,58 @@ IMMEDIATEMODE = 1
 # input_ = int(input("Your input:"))
 input_ = 1
 
-def calculate(split: list): 
+def calculate(sequence: list): 
     i=0
     
     def _getIndex_(mode: int, index: int):
         if mode == POSITIONMODE:
-            return split[index]
+            return sequence[index]
         elif mode == IMMEDIATEMODE:
             return index
         return None
 
-    init = [int(i) for i in str(split[i])]
+    init = [int(i) for i in str(sequence[i])]
     # modes = [A, B, C, D, E]
     #A - mode of 3rd parameter, B - mode of 2nd parameter, C - mode of 1st parameter, DE - two-digit opcode
     modes = [POSITIONMODE,POSITIONMODE,POSITIONMODE,POSITIONMODE,POSITIONMODE]
     for s in range(0, len(init)):
-        modes[len(modes)-s-1] = init[-s]
+        modes[len(modes)-s-1] = init[-s-1]
     OPCode = modes[-2]*10 + modes[-1]
     while OPCode != 99:
-        init = [int(i) for i in str(split[i])]
-        modes = modes = [POSITIONMODE,POSITIONMODE,POSITIONMODE,POSITIONMODE,POSITIONMODE]
-        for s in range(0, len(init)):
-            modes[len(modes)-s-1] = init[-s-1]
-        OPCode = modes[-2]*10 + modes[-1]
         p1, p2, p3 = i+1, i+2, i+3
         if OPCode == 1:
-            split[split[p3]] = split[_getIndex_(modes[0],p1)]+split[_getIndex_(modes[1],p2)]
+            sequence[sequence[p3]] = sequence[_getIndex_(modes[2],p1)]+sequence[_getIndex_(modes[1],p2)]
             i+=4
         elif OPCode == 2:
-            p1 = _getIndex_(modes[0],p1)
-            p2 = _getIndex_(modes[1],p2)
-            split[split[p3]] = split[p1]*split[p2]
+            sequence[sequence[p3]] = sequence[_getIndex_(modes[2],p1)]*sequence[_getIndex_(modes[1],p2)]
             i+=4
         elif OPCode == 3:
-            split[split[p1]] = input_
+            sequence[sequence[p1]] = input_
             i+=2
         elif OPCode == 4:
-            print(split[_getIndex_(modes[0], p1)])
+            print(sequence[_getIndex_(modes[2], p1)])
             i+=2
         else:
             print('unknown operation')
             i+=4
         
-    return split
+        init = [int(i) for i in str(sequence[i])]
+        modes = modes = [POSITIONMODE,POSITIONMODE,POSITIONMODE,POSITIONMODE,POSITIONMODE]
+        for s in range(0, len(init)):
+            modes[len(modes)-s-1] = init[-s-1]
+        OPCode = modes[-2]*10 + modes[-1]
+
+    return sequence
 
 
 #test cases
 expectedResult = [1002,4,3,4,99]
 line = [1002,4,3,4,33]
 print('Test 1:', calculate(line) == expectedResult)
+expectedResult = [1101,100,-1,4,99]
+line = [1101,100,-1,4,0]
+print('Test 1:', calculate(line) == expectedResult)
+
 
 split = list()
 # split = [ int(i) for i in line.split(',') ]
@@ -111,6 +114,7 @@ split = list()
 with open('Day5/input.txt') as file:
     split = [ int(i) for i in file.readlines(1)[0].split(',') ]
     
+calculate(split)
 # split[1] = 12
 # split[2] = 2
-print("Result:", calculate(split)[0])
+# print("Result:", calculate(split)[0])
