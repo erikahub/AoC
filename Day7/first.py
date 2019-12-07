@@ -41,3 +41,90 @@ Max thruster signal 65210 (from phase setting sequence 1,0,4,3,2):
 Try every combination of phase settings on the amplifiers. What is the highest signal that can be sent to the thrusters?
 """
 
+from itertools import permutations
+
+phases = 4
+phaseSetting = [_ for _ in permutations(range(phases+1), phases+1)]
+ampOutput = 0
+POSITIONMODE = 0
+IMMEDIATEMODE = 1
+
+input_ = 0
+
+def calculate(sequence: list, input_: int):
+    i=0
+    ret = 0
+
+    ops = list()
+    def _getIndex_(mode: int, index: int):
+        if mode == POSITIONMODE:
+            return sequence[index]
+        elif mode == IMMEDIATEMODE:
+            return index
+        return None
+
+    init = [int(i) for i in str(sequence[i])]
+    # modes = [A, B, C, D, E]
+    #A - mode of 3rd parameter, B - mode of 2nd parameter, C - mode of 1st parameter, DE - two-digit opcode
+    modes = [POSITIONMODE,POSITIONMODE,POSITIONMODE,POSITIONMODE,POSITIONMODE]
+    for s in range(0, len(init)):
+        modes[len(modes)-s-1] = init[-s-1]
+    OPCode = modes[-2]*10 + modes[-1]
+    while OPCode != 99:
+        ops.append(OPCode)
+        p1, p2, p3 = i+1, i+2, i+3
+        if OPCode == 1:
+            sequence[sequence[p3]] = sequence[_getIndex_(modes[2],p1)]+sequence[_getIndex_(modes[1],p2)]
+            i+=4
+        elif OPCode == 2:
+            sequence[sequence[p3]] = sequence[_getIndex_(modes[2],p1)]*sequence[_getIndex_(modes[1],p2)]
+            i+=4
+        elif OPCode == 3:
+            sequence[sequence[p1]] = input_
+            input_ = ampOutput
+            i+=2 
+        elif OPCode == 4:
+            #CHANGED FROM PRINT TO RETURN
+            ret = sequence[_getIndex_(modes[2], p1)]
+            i+=2
+        elif OPCode == 5:
+            i = sequence[_getIndex_(modes[1], p2)] if sequence[_getIndex_(modes[2], p1)] != 0 else i+3
+        elif OPCode == 6:
+            i = sequence[_getIndex_(modes[1], p2)] if sequence[_getIndex_(modes[2], p1)] == 0 else i+3
+        elif OPCode == 7:
+            sequence[sequence[p3]] = 1 if sequence[_getIndex_(modes[2], p1)] < sequence[_getIndex_(modes[1], p2)] else 0 
+            i+=4
+        elif OPCode == 8:
+            sequence[sequence[p3]] = 1 if sequence[_getIndex_(modes[2], p1)] == sequence[_getIndex_(modes[1], p2)] else 0 
+            i+=4
+        else:
+            print('unknown operation')
+            i+=4
+            
+        init = [int(i) for i in str(sequence[i])]
+        modes = modes = [POSITIONMODE,POSITIONMODE,POSITIONMODE,POSITIONMODE,POSITIONMODE]
+        for s in range(0, len(init)):
+            modes[len(modes)-s-1] = init[-s-1]
+        OPCode = modes[-2]*10 + modes[-1]
+
+    return ret
+
+split = list()
+#test1, expected 43210
+split = [3,15,3,16,1002,16,10,16,1,16,15,15,4,15,99,0,0]
+
+#read from file
+# with open('Day7/input.txt') as file:
+    # split = [ int(i) for i in file.readlines(1)[0].split(',') ]
+
+thrusterSignals = list()
+#for possible phase combinations
+for c in phaseSetting:
+    #for phases in combination
+    for val in c:
+        input_ = val
+        ampOutput = calculate(split, input_)
+        thrusterSignals.append(ampOutput)
+
+
+print(max(thrusterSignals))
