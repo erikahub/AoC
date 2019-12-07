@@ -52,3 +52,32 @@ The total number of direct and indirect orbits in this example is 42.
 What is the total number of direct and indirect orbits in your map data?
 """
 
+"""
+
+dict {a:list(), b:list(), ...}
+for obj in file:
+
+
+"""
+from collections import defaultdict
+objects = defaultdict(list)
+
+# with open('Day6/input.txt') as file:
+with open('Day6/test.txt') as file:
+    for line in file:
+        c = line[:-1].split(')')
+        objects[c[0]].append(c[1])
+        
+print(objects)
+
+directOrbits = 0
+indirectOrbits = 0
+
+def func(key: str):
+    for key in objects[key]:
+        
+
+for o in objects:
+    directOrbits+=len(objects[o])
+    for so in objects[o]:
+        indirectOrbits+=len(objects[so])
